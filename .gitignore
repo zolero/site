@@ -8,3 +8,4 @@ Cargo.lock
 node_modules/
 dist/
 .parcel-cache
+.idea/
