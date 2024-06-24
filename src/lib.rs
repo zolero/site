@@ -1,3 +1,5 @@
+
+
 use std::collections::HashMap;
 
 use pest::error::{Error, ErrorVariant, InputLocation};
@@ -9,6 +11,8 @@ use pest_meta::{optimizer, validator};
 use pest_vm::Vm;
 
 use wasm_bindgen::prelude::*;
+
+mod serializer;
 
 static mut VM: Option<Vm> = None;
 
@@ -68,9 +72,11 @@ fn parse_input(rule: &str, input: &str) -> String {
             let lines: Vec<_> = pairs.map(|pair| format_pair(pair, 0, true)).collect();
             lines.join("\n")
         }
-        Err(error) => error.renamed_rules(|r| r.to_string()).to_string(),
+        Err(error) => serializer::format_error_json(&error),
     }
 }
+
+
 
 /// Converts a pest error into a hash map for serialization.
 fn convert_error(error: Error<Rule>, grammar: &str) -> HashMap<String, String> {
